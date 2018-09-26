@@ -21,6 +21,7 @@ rm -rf $ROOTFS_DIR
 mkdir -p $ROOTFS_DIR
 
 wget http://os.archlinuxarm.org/os/ArchLinuxARM-armv5-latest.tar.gz
+tar -zxvf ArchLinuxARM-armv5-latest.tar.gz $ROOTFS_DIR
 
 # The following just sets up a few files for UserLAnd's benefit, mostly nameserver and path stuff
 
@@ -50,4 +51,3 @@ rm $ROOTFS_DIR/shrinkRootfs.sh
 
 tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
-# 
