@@ -20,7 +20,7 @@ mkdir -p $ARCH_DIR
 rm -rf $ROOTFS_DIR
 mkdir -p $ROOTFS_DIR
 
-# download userland from archlinux, pacman should do the trick but i still need to find out how
+wget http://os.archlinuxarm.org/os/ArchLinuxARM-armv5-latest.tar.gz
 
 # The following just sets up a few files for UserLAnd's benefit, mostly nameserver and path stuff
 
@@ -37,8 +37,6 @@ chmod +x $ROOTFS_DIR/etc/profile.d/userland.sh
 # Determine if you need to set up package sources for ArchLinux, script goes here
 
 # Copy the scripts and tar up everything
-
-wget http://os.archlinuxarm.org/os/ArchLinuxARM-armv5-latest.tar.gz
 
 cp scripts/addNonRootUser.sh $ROOTFS_DIR
 chmod 777 $ROOTFS_DIR/addNonRootUser.sh
