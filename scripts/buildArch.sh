@@ -38,6 +38,8 @@ chmod +x $ROOTFS_DIR/etc/profile.d/userland.sh
 
 # Copy the scripts and tar up everything
 
+wget http://os.archlinuxarm.org/os/ArchLinuxARM-armv5-latest.tar.gz
+
 cp scripts/addNonRootUser.sh $ROOTFS_DIR
 chmod 777 $ROOTFS_DIR/addNonRootUser.sh
 DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true LC_ALL=C LANGUAGE=C LANG=C chroot $ROOTFS_DIR ./addNonRootUser.sh
