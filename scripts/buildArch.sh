@@ -3,22 +3,12 @@
 export ARCH_DIR=output/${1}
 export ROOTFS_DIR=$ARCH_DIR/rootfs
 
-case "$1" in
-	arm) export #DEBOOTSTRAP/SPECIFIEDARCH=armhf
-		;;
-	arm64) export #DEBOOTSTRAP/SPECIFIEDARCH=arm64
-		;;
-	all) exit
-		;;
-	*) echo "unsupported arch"
-		exit
-		;;
-esac
-
 rm -rf $ARCH_DIR
 mkdir -p $ARCH_DIR
 rm -rf $ROOTFS_DIR
 mkdir -p $ROOTFS_DIR
+
+# Here we untar the ARM port, need to figure out what to do with the x86 version
 
 wget http://os.archlinuxarm.org/os/ArchLinuxARM-armv5-latest.tar.gz
 tar -zxvf ArchLinuxARM-armv5-latest.tar.gz $ROOTFS_DIR
@@ -35,7 +25,19 @@ echo "unset LD_LIBRARY_PATH" >> $ROOTFS_DIR/etc/profile.d/userland.sh
 echo "export LIBGL_ALWAYS_SOFTWARE=1" >> $ROOTFS_DIR/etc/profile.d/userland.sh
 chmod +x $ROOTFS_DIR/etc/profile.d/userland.sh
 
-# Determine if you need to set up package sources for ArchLinux, script goes here
+# Following the bootstrap instructions from the arch-bootstrap.sh script
+
+install -m 755 arch-bootstrap.sh /usr/local/bin/arch-bootstrap
+
+arch-bootstrap -a arm -r "http://mirror.archlinuxarm.org" myarch # this may not work
+
+chroot $ROOTFS_DIR # this may not work
+
+# All of the following mount commands should be run once, even if some don't work
+mount --bind /proc myarch/proc
+mount --bind /sys myarch/sys
+mount --bind /dev myarch/dev
+mount --bind /dev/pts myarch/dev/pts
 
 # Copy the scripts and tar up everything
 
