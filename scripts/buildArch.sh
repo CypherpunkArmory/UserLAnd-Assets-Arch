@@ -25,19 +25,8 @@ echo "unset LD_LIBRARY_PATH" >> $ROOTFS_DIR/etc/profile.d/userland.sh
 echo "export LIBGL_ALWAYS_SOFTWARE=1" >> $ROOTFS_DIR/etc/profile.d/userland.sh
 chmod +x $ROOTFS_DIR/etc/profile.d/userland.sh
 
-# Following the bootstrap instructions from the arch-bootstrap.sh script
-
-install -m 755 arch-bootstrap.sh /usr/local/bin/arch-bootstrap
-
-arch-bootstrap -a arm -r "http://mirror.archlinuxarm.org" myarch # this may not work
-
-chroot $ROOTFS_DIR # this may not work
-
-# All of the following mount commands should be run once, even if some don't work
-mount --bind /proc myarch/proc
-mount --bind /sys myarch/sys
-mount --bind /dev myarch/dev
-mount --bind /dev/pts myarch/dev/pts
+pacman-key init
+pacman-key --populate archlinux
 
 # Copy the scripts and tar up everything
 
