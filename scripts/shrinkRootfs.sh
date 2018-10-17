@@ -2,4 +2,4 @@
 
 # pacman's equivalent of apt clean
 
-paccache -r
+pacman -Scc
