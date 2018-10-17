@@ -67,7 +67,7 @@ case "$1" in
 	export POPNAME=archlinuxx86_64
 
 	wget https://mex.mirror.pkgbuild.com/core/os/x86_64/filesystem-2018.8-1-x86_64.pkg.tar.xz
-	tar -xf filesystem-2018.8-1-x86_64.pkg.tar.xz $ROOTFS_DIR 
+	tar -xf filesystem-2018.8-1-x86_64.pkg.tar.xz -C $ROOTFS_DIR .
 
 	echo "127.0.0.1 localhost" > $ROOTFS_DIR/etc/hosts
 	rm $ROOTFS_DIR/etc/resolv.conf
