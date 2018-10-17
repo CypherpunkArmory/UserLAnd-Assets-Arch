@@ -3,7 +3,7 @@
 export ARCH_DIR=output/${1}
 export ROOTFS_DIR=$ARCH_DIR/rootfs
 # current workaround for mounting issues with chroot
-export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt --rootfs="$ROOTFS_DIR""
+export CHROOTCMD="proot -0 -r $ROOTFS_DIR -b /run -b /sys -b /dev -b /proc -b /mnt --rootfs="$ROOTFS_DIR""
 
 case "$1" in 
 	armhf)
@@ -65,9 +65,9 @@ case "$1" in
 		pwd
 
 	export POPNAME=archlinuxx86_64
-
-	wget https://mex.mirror.pkgbuild.com/core/os/x86_64/filesystem-2018.8-1-x86_64.pkg.tar.xz
-	tar -xf filesystem-2018.8-1-x86_64.pkg.tar.xz -C $ROOTFS_DIR .
+	
+	wget http://mirror.rackspace.com/archlinux/iso/2018.10.01/archlinux-bootstrap-2018.10.01-x86_64.tar.gz
+	tar -zxvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz -C $ROOTFS_DIR 
 
 	echo "127.0.0.1 localhost" > $ROOTFS_DIR/etc/hosts
 	rm $ROOTFS_DIR/etc/resolv.conf
