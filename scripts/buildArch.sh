@@ -102,10 +102,9 @@ case "$1" in
 	cp $ROOTFS_DIR/bin/busybox $ARCH_DIR/busybox
 ;;
 
-	*) 
+	*) echo "unsupported architecture"
+	   exit
 	
-	echo "unsupported architecture"
-	exit	
 ;;
 
 esac
