@@ -1,28 +1,39 @@
-#Temp code to make sure we only work on armhf for now
-if [ "$1" != "armhf" ]; then
-        echo "only armhf is supported right now"
-        exit
-fi
+#! /bin/bash
 
-export POPNAME=archlinxarm
+case "$1" in
+	armhf) 
+
+export POPNAME=archlinuxarm
 export ARCH_DIR=output/${1}
 export ROOTFS_DIR=$ARCH_DIR/rootfs
 
 #Current workaround for mounting issues with chroot
 export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt --rootfs=$ROOTFS_DIR"
 
-rm -rf $ARCH_DIR
-mkdir -p $ARCH_DIR
-rm -rf $ROOTFS_DIR
-mkdir -p $ROOTFS_DIR
+wget http://fl.us.mirror.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz
+tar -zxvf ArchLinuxARM-armv7-latest.tar.gz -C $ROOTFS_DIR .
+#arch-debootstrap -a armv7h $ROOTFS_DIR # You can uncomment this line, and comment the two lines above this one if you want to use the tar as a base instead. but using bootstrap will require root permissions
+	;;
+	
+	arm64) echo "only armhf and x86_64 are supported right now"
+	       exit
+	;;
+	
+	x86) echo "only armhf and x86_64 are supported right now"
+	     exit
+     	;;
 
-# wget http://fl.us.mirror.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz
-tar -zxvf ArchLinuxARM-armv7-latest.tar.gz $ROOTFS_DIR
+	x86_64) 
 
-# first setup the chroot environment
-cp /usr/bin/qemu-arm-static $ROOTFS_DIR/usr/bin
-chroot ./$ROOTFS_DIR /bin/bash
-# let's see if the above works..
+export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt --rootfs=$ROOTFS_DIR"
+wget https://mex.mirror.pkgbuild.com/core/os/x86_64/filesystem-2018.8-1-x86_64.pkg.tar.xz
+tar -xf filesystem-2018.8-1-x86_64.pkg.tar.xz -C $ROOTFS_DIR .
+	;;
+	
+	*) echo "unsupported architecture"
+	   exit
+   	   ;;
+esac	   
 
 echo "127.0.0.1 localhost" > $ROOTFS_DIR/etc/hosts
 rm $ROOTFS_DIR/etc/resolv.conf
@@ -42,8 +53,8 @@ rm $ROOTFS_DIR/addNonRootUser.sh
 
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --populate $POPNAME
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key -Syy --noconfirm
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key -Su --noconfirm
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Syy --noconfirm
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Su --noconfirm
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
 
 tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR
