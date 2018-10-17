@@ -3,7 +3,7 @@
 export ARCH_DIR=output/${1}
 export ROOTFS_DIR=$ARCH_DIR/rootfs
 # current workaround for mounting issues with chroot
-export CHROOTCMD="proot -0 b /run -b /sys -b /dev -b /proc -b /mnt --rootfs="$ROOTFS_DIR""
+export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt --rootfs="$ROOTFS_DIR""
 
 case "$1" in 
 	armhf)
