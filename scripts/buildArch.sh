@@ -31,6 +31,8 @@ case "$1" in
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD ./addNonRootUser.sh
 	rm $ROOTFS_DIR/addNonRootUser.sh
 
+	start dhcpcd #temporary 
+
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --populate $POPNAME
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Syy --noconfirm
@@ -62,12 +64,16 @@ case "$1" in
 ;;
 
 	x86_64)
-		pwd
 
 	export POPNAME=archlinux
-	
-	wget http://mirror.rackspace.com/archlinux/iso/2018.10.01/archlinux-bootstrap-2018.10.01-x86_64.tar.gz
-	tar -zxvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz -C $ROOTFS_DIR 
+
+	if [ -e archlinux-bootstrap-2018.10.01-x86_64.tar.gz ]
+	then
+		tar -zxvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz -C $ROOTFS_DIR --strip 1
+	else
+		wget http://mirror.rackspace.com/archlinux/iso/2018.10.01/archlinux-bootstrap-2018.10.01-x86_64.tar.gz
+		tar -zxvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz -C $ROOTFS_DIR --strip 1
+	fi
 
 	echo "127.0.0.1 localhost" > $ROOTFS_DIR/etc/hosts
 	rm $ROOTFS_DIR/etc/resolv.conf
