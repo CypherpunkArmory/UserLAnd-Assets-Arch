@@ -64,7 +64,7 @@ case "$1" in
 	x86_64)
 		pwd
 
-	export POPNAME=archlinuxx86_64
+	export POPNAME=archlinux
 	
 	wget http://mirror.rackspace.com/archlinux/iso/2018.10.01/archlinux-bootstrap-2018.10.01-x86_64.tar.gz
 	tar -zxvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz -C $ROOTFS_DIR 
