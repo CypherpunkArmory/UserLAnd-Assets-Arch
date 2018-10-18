@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export ARCH_DIR=../output/$1
+export ARCH_DIR=output/$1
 export ROOTFS_DIR=$ARCH_DIR/rootfs
 export INSTALL_DIR=assets/$1
 
