@@ -32,6 +32,7 @@ case "$1" in
 	rm $ROOTFS_DIR/addNonRootUser.sh
 
 	start dhcpcd #temporary 
+	ping 4.2.2.1 #temporary
 
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --populate $POPNAME
@@ -91,7 +92,7 @@ case "$1" in
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD ./addNonRootUser.sh
 	rm $ROOTFS_DIR/addNonRootUser.sh
 
-	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init
+	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init #might need to generate entropy here
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --populate $POPNAME
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Syy --noconfirm
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Su --noconfirm
