@@ -100,7 +100,7 @@ case "$1" in
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Su --noconfirm
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
 
-	tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR
+	tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
 	#build disableselinux to go with this release
 	cp scripts/disableselinux.c $ROOTFS_DIR
@@ -111,7 +111,7 @@ case "$1" in
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S busybox --noconfirm
 	cp $ROOTFS_DIR/bin/busybox $ARCH_DIR/busybox
 
-	killallgpg-agent
+	killall gpg-agent
 
 ;;
 
