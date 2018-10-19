@@ -3,7 +3,7 @@
 export ARCH_DIR=output/${1}
 export ROOTFS_DIR=$ARCH_DIR/rootfs
 # current workaround for mounting issues with chroot
-export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt --rootfs=$ROOTFS_DIR"
+export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt -b /dev/urandom:/dev/random --rootfs=$ROOTFS_DIR"
 
 case "$1" in 
 	armhf)
@@ -86,14 +86,16 @@ case "$1" in
 	echo "unset LD_LIBRARY_PATH" >> $ROOTFS_DIR/etc/profile.d/userland.sh
 	echo "export LIBGL_ALWAYS_SOFTWARE=1" >> $ROOTFS_DIR/etc/profile.d/userland.sh
 	chmod +x $ROOTFS_DIR/etc/profile.d/userland.sh
+	echo "Server = http://mirrors.evowise.com/archlinux/\$repo/os/\$arch" >> $ROOTFS_DIR/etc/pacman.d/mirrorlist
 
 	cp scripts/addNonRootUser.sh $ROOTFS_DIR
 	chmod 777 $ROOTFS_DIR/addNonRootUser.sh
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD ./addNonRootUser.sh
 	rm $ROOTFS_DIR/addNonRootUser.sh
-
-	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init #might need to generate entropy here
-	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --populate $POPNAME
+	
+	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
+	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init 
+	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --populate $POPNAME 
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Syy --noconfirm
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Su --noconfirm
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
@@ -108,6 +110,9 @@ case "$1" in
 	#get busybox to go with the release
 	LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S busybox --noconfirm
 	cp $ROOTFS_DIR/bin/busybox $ARCH_DIR/busybox
+
+	killallgpg-agent
+
 ;;
 
 	*) echo "unsupported architecture"
