@@ -40,7 +40,7 @@ chmod 777 $ROOTFS_DIR/shrinkRootfs.sh
 LC_ALL=C LANGUAGE=C LANG=C chroot $ROOTFS_DIR ./shrinkRootfs.sh
 rm $ROOTFS_DIR/shrinkRootfs.sh
 
-tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
+tar --exclude='dev/*' --exclude='etc/mtab' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
 LC_ALL=C LANGUAGE=C LANG=C chroot $ROOTFS_DIR pacman -S base-devel --noconfirm
 
