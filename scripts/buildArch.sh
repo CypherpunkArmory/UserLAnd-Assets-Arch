@@ -73,6 +73,7 @@ chmod 777 $ROOTFS_DIR/addNonRootUser.sh
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD ./addNonRootUser.sh
 rm $ROOTFS_DIR/addNonRootUser.sh
 
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --populate $POPNAME
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Syy --noconfirm
