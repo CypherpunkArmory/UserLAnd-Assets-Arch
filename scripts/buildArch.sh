@@ -80,7 +80,7 @@ LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Syy --noconfirm
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Su --noconfirm
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
 
-#tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
+tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
 #build disableselinux to go with this release
 cp scripts/disableselinux.c $ROOTFS_DIR
