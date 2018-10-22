@@ -68,9 +68,6 @@ echo "unset LD_LIBRARY_PATH" >> $ROOTFS_DIR/etc/profile.d/userland.sh
 echo "export LIBGL_ALWAYS_SOFTWARE=1" >> $ROOTFS_DIR/etc/profile.d/userland.sh
 chmod +x $ROOTFS_DIR/etc/profile.d/userland.sh
 
-echo "Server = http://mirrors.evowise.com/archlinux/$repo/os/$arch" > $ROOTFS_DIR/etc/pacman.d/mirrorlist
-echo "Server = http://mirror.rackspace.com/archlinux/$repo/os/$arch" >> $ROOTFS_DIR/etc/pacman.d/mirrorlist
-
 cp scripts/addNonRootUser.sh $ROOTFS_DIR
 chmod 777 $ROOTFS_DIR/addNonRootUser.sh
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD ./addNonRootUser.sh
