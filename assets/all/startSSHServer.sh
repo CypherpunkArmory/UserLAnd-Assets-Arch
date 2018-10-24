@@ -1,3 +1,3 @@
-#! /bin/bash
+#! /bin/bash --login
 
-dropbear -E -p 2022 -R
+dropbear -E -p 2022 -R 
