@@ -27,7 +27,7 @@ EOF
 fi
 
 if [ ! -f /home/$INITIAL_USERNAME/.vnc/server.crt ]; then
-   openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -keyout /home/$INITIAL_USERNAME/.vnc/server.pem -out /home/$INITIAL_USERNAME/.vnc/server.crt
+   openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -keyout /home/$INITIAL_USERNAME/.vnc/server.pem -out /home/$INITIAL_USERNAME/.vnc/server.crt -subj "/C=NA"
 fi
 
 rm /tmp/.X51-lock
