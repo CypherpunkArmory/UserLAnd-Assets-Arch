@@ -26,14 +26,10 @@ EOF
 
 fi
 
-if [ ! -f /home/$INITIAL_USERNAME/.vnc/server.crt ]; then
-   openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -keyout /home/$INITIAL_USERNAME/.vnc/server.pem -out /home/$INITIAL_USERNAME/.vnc/server.crt -subj "/C=NA"
-fi
-
 rm /tmp/.X51-lock
 rm /tmp/.X11-unix/X51
 vncserver -kill :51
-vncserver :51 -x509key /home/$INITIAL_USERNAME/.vnc/server.pem -x509cert /home/$INITIAL_USERNAME/.vnc/server.crt
+vncserver :51 -SecurityTypes=VncAuth
 
 while [ ! -f /home/$INITIAL_USERNAME/.vnc/localhost:51.pid ]
 do
