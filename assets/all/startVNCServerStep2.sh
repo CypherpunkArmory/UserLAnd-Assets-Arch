@@ -33,7 +33,7 @@ fi
 rm /tmp/.X51-lock
 rm /tmp/.X11-unix/X51
 vncserver -kill :51
-vncserver -x509key /home/$INITIAL_USERNAME/.vnc/server.pem -x509cert /home/$INITIAL_USERNAME/.vnc/server.crt :51
+vncserver :51 -x509key /home/$INITIAL_USERNAME/.vnc/server.pem -x509cert /home/$INITIAL_USERNAME/.vnc/server.crt
 
 while [ ! -f /home/$INITIAL_USERNAME/.vnc/localhost:51.pid ]
 do
