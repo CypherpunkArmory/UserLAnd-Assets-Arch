@@ -10,6 +10,7 @@ export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt -b /dev/uran
 case "$1" in
 	armhf) 
 		export POPNAME=archlinuxarm
+		export ARCHOPTION=qemu-arm
 
 		if [ -e ArchLinuxARM-armv7-latest.tar.gz ]
 		then
@@ -73,12 +74,12 @@ chmod 777 $ROOTFS_DIR/addNonRootUser.sh
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD ./addNonRootUser.sh
 rm $ROOTFS_DIR/addNonRootUser.sh
 
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --init
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman-key --populate $POPNAME
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Syy --noconfirm
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -Su --noconfirm
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION  pacman-key --init
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman-key --populate $POPNAME
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -Syy --noconfirm
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -Su --noconfirm
+LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -S pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
 
 tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
