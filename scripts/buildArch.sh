@@ -6,6 +6,12 @@ export ROOTFS_DIR=$ARCH_DIR/rootfs
 # current workaround for mounting issues with chroot
 export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt -b /dev/urandom:/dev/random --rootfs=$ROOTFS_DIR"
 # note: leaving the redirect to urandom in temporarily in case entropy is needed elsewhere. will remove later
+# export CHROOTCMD="chroot $ROOTFS_DIR"
+
+rm -rf $ARCH_DIR
+mkdir -p $ARCH_DIR
+rm -rf $ROOTFS_DIR
+mkdir -p $ROOTFS_DIR
 
 case "$1" in
 	armhf) 
@@ -37,6 +43,7 @@ case "$1" in
 
 	x86_64)
 		export POPNAME=archlinux
+		export ARCHOPTION=qemu-x86_64
 
 		if [ -e archlinux-bootstrap-2018.10.01-x86_64.tar.gz ]
 		then
@@ -74,12 +81,12 @@ chmod 777 $ROOTFS_DIR/addNonRootUser.sh
 LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD ./addNonRootUser.sh
 rm $ROOTFS_DIR/addNonRootUser.sh
 
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION  pacman-key --init
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman-key --populate $POPNAME
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -Syy --noconfirm
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -Su --noconfirm
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -S pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
+LC_ALL=C LANGUAGE=C LANG=C $ARCHOPTION $CHROOTCMD gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
+LC_ALL=C LANGUAGE=C LANG=C $ARCHOPTION $CHROOTCMD pacman-key --init
+LC_ALL=C LANGUAGE=C LANG=C $ARCHOPTION $CHROOTCMD pacman-key --populate $POPNAME
+LC_ALL=C LANGUAGE=C LANG=C $ARCHOPTION $CHROOTCMD pacman -Syy --noconfirm
+LC_ALL=C LANGUAGE=C LANG=C $ARCHOPTION $CHROOTCMD pacman -Su --noconfirm
+LC_ALL=C LANGUAGE=C LANG=C $ARCHOPTION $CHROOTCMD pacman -Sy coreutils pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
 
 tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
@@ -93,4 +100,5 @@ LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S busybox --noconfirm
 cp $ROOTFS_DIR/bin/busybox $ARCH_DIR/busybox
 
 killall gpg-agent
-			
+
+		
