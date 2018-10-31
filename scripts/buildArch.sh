@@ -6,6 +6,10 @@
 
 set -e -u -o pipefail
 
+export LC_ALL=C
+export LANG=C
+export LANGUAGE=C
+
 # current workaround for mounting issues with chroot
 # export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt -b /dev/urandom:/dev/random --rootfs=$ROOTFS_DIR"
 # note: leaving the redirect to urandom in temporarily in case entropy is needed elsewhere. will remove later
@@ -55,12 +59,12 @@ case "$1" in
 	x86_64)
 		export POPNAME=archlinux
 	
-		if [ -e ArchLinuxARM-armv7-latest.tar.gz ]
+		if [ -e archlinux-bootstrap-2018.10.01-x86_64.tar.gz ]
 		then
-			tar -xzvf ArchLinuxARM-armv7-latest.tar.gz -C $ROOTFS_DIR .
+			tar -xzvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz --strip 1 -C $ROOTFS_DIR  
 		else
-			wget  http://fl.us.mirror.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz
-			tar -xzvf ArchLinuxARM-armv7-latest.tar.gz -C $ROOTFS_DIR .
+			wget http://mirrors.evowise.com/archlinux/iso/2018.10.01/archlinux-bootstrap-2018.10.01-x86_64.tar.gz
+			tar -xzvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz --strip 1 -C $ROOTFS_DIR  
 			#arch-debootstrap -a arm7h $ROOTFS_DIR # uncomment this line, and comment the two lines above this one if you
 			# want to use the tar as a base instead, but using bootstrap will require root permissions
 			
@@ -80,27 +84,27 @@ cp "/etc/resolv.conf" "$ROOTFS_DIR/etc/resolv.conf"
 
 cp scripts/addNonRootUser.sh $ROOTFS_DIR
 chmod 777 $ROOTFS_DIR/addNonRootUser.sh
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD ./addNonRootUser.sh
+$CHROOTCMD ./addNonRootUser.sh
 rm $ROOTFS_DIR/addNonRootUser.sh
 
 # create the chroot/proot environment, where the magic (hopefully happens)
 
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman-key --init
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman-key --populate $POPNAME
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -Syy --noconfirm
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -Su --noconfirm
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD $ARCHOPTION pacman -Sy coreutils pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
+$CHROOTCMD $ARCHOPTION gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
+$CHROOTCMD $ARCHOPTION pacman-key --init
+$CHROOTCMD $ARCHOPTION pacman-key --populate $POPNAME
+$CHROOTCMD $ARCHOPTION pacman -Syy --noconfirm
+$CHROOTCMD $ARCHOPTION pacman -Su --noconfirm
+$CHROOTCMD $ARCHOPTION pacman -Sy coreutils pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
 
 tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
 #build disableselinux to go with this release
 cp scripts/disableselinux.c $ROOTFS_DIR
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD gcc -shared -fpic disableselinux.c -o libdisableselinux.so
+$CHROOTCMD gcc -shared -fpic disableselinux.c -o libdisableselinux.so
 cp $ROOTFS_DIR/libdisableselinux.so $ARCH_DIR/libdisableselinux.so
 
 #get busybox to go with the release
-LC_ALL=C LANGUAGE=C LANG=C $CHROOTCMD pacman -S busybox --noconfirm
+$CHROOTCMD pacman -S busybox --noconfirm
 cp $ROOTFS_DIR/bin/busybox $ARCH_DIR/busybox
 
 killall gpg-agent
