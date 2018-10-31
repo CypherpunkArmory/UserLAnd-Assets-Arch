@@ -33,7 +33,11 @@ case "$1" in
 		
 		if [ -e ArchLinuxARM-armv7-latest.tar.gz ]
 		then
+			chown $SUDO_USER ArchLinuxARM-armv7-latest.tar.gz
 			tar -xzvf ArchLinuxARM-armv7-latest.tar.gz -C $ROOTFS_DIR .
+
+			cp "/usr/bin/qemu-arm-static" "$ROOTFS_DIR/usr/bin"
+			export ARCHOPTION=qemu-arm-static
 		else
 			wget  http://fl.us.mirror.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz
 			tar -xzvf ArchLinuxARM-armv7-latest.tar.gz -C $ROOTFS_DIR .
@@ -41,7 +45,7 @@ case "$1" in
 			# want to use the tar as a base instead, but using bootstrap will require root permissions
 
 			cp "/usr/bin/qemu-arm-static" "$ROOTFS_DIR/usr/bin"
-			export $ARCHOPTION="/usr/bin/qemu-arm-static"
+			export ARCHOPTION=qemu-arm-static
 		fi
 
 	;;
@@ -61,7 +65,11 @@ case "$1" in
 	
 		if [ -e archlinux-bootstrap-2018.10.01-x86_64.tar.gz ]
 		then
+			chown $SUDO_USER archlinux-bootstrap-2018.10.01-x86_64.tar.gz
 			tar -xzvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz --strip 1 -C $ROOTFS_DIR  
+
+			cp "/usr/bin/qemu-x86_64-static" "$ROOTFS_DIR/usr/bin"
+			export ARCHOPTION=/usr/bin/qemu-x86_64-static
 		else
 			wget http://mirrors.evowise.com/archlinux/iso/2018.10.01/archlinux-bootstrap-2018.10.01-x86_64.tar.gz
 			tar -xzvf archlinux-bootstrap-2018.10.01-x86_64.tar.gz --strip 1 -C $ROOTFS_DIR  
@@ -69,9 +77,14 @@ case "$1" in
 			# want to use the tar as a base instead, but using bootstrap will require root permissions
 			
 			cp "/usr/bin/qemu-x86_64-static" "$ROOTFS_DIR/usr/bin"
-			export $ARCHOPTION="/usr/bin/qemu-x86_64-static"
+			export ARCHOPTION=/usr/bin/qemu-x86_64-static
 		fi
 
+	;;
+
+	*)
+		echo "only armhf and x86_64 are supported."
+		exit
 	;;
 
 	esac
@@ -84,11 +97,13 @@ cp "/etc/resolv.conf" "$ROOTFS_DIR/etc/resolv.conf"
 
 cp scripts/addNonRootUser.sh $ROOTFS_DIR
 chmod 777 $ROOTFS_DIR/addNonRootUser.sh
-$CHROOTCMD ./addNonRootUser.sh
+$CHROOTCMD $ARCHOPTION ./addNonRootUser.sh
 rm $ROOTFS_DIR/addNonRootUser.sh
 
 # create the chroot/proot environment, where the magic (hopefully happens)
 
+$CHROOTCMD echo "PROOT CALLING ECHO IS WORKING"
+echo "output of commands is: $CHROOTCMD $ARCHOPTION command1 command2"
 $CHROOTCMD $ARCHOPTION gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
 $CHROOTCMD $ARCHOPTION pacman-key --init
 $CHROOTCMD $ARCHOPTION pacman-key --populate $POPNAME
@@ -100,11 +115,11 @@ tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
 #build disableselinux to go with this release
 cp scripts/disableselinux.c $ROOTFS_DIR
-$CHROOTCMD gcc -shared -fpic disableselinux.c -o libdisableselinux.so
+$CHROOTCMD $ARCHOPTION gcc -shared -fpic disableselinux.c -o libdisableselinux.so
 cp $ROOTFS_DIR/libdisableselinux.so $ARCH_DIR/libdisableselinux.so
 
 #get busybox to go with the release
-$CHROOTCMD pacman -S busybox --noconfirm
+$CHROOTCMD /usr/bin/qemu-"$ARCHOPTION"-static pacman -S busybox --noconfirm
 cp $ROOTFS_DIR/bin/busybox $ARCH_DIR/busybox
 
 killall gpg-agent
