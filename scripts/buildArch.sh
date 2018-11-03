@@ -23,6 +23,8 @@ mkdir -p $ARCH_DIR
 rm -rf $ROOTFS_DIR
 mkdir -p $ROOTFS_DIR
 
+chown $SUDO_USER ./* # this may be necessary
+
 export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt -b /dev/urandom:/dev/random --rootfs=$ROOTFS_DIR"
 
 # Download and untar the different filesystems. Using qemu-static utilities because we have to within the proot environment
@@ -96,20 +98,31 @@ cp "/etc/resolv.conf" "$ROOTFS_DIR/etc/resolv.conf"
 # stuff in a new users
 
 cp scripts/addNonRootUser.sh $ROOTFS_DIR
+chown $SUDO_USER $ROOTFS_DIR/addNonRootUser.sh
 chmod 777 $ROOTFS_DIR/addNonRootUser.sh
-$CHROOTCMD $ARCHOPTION ./addNonRootUser.sh
+$CHROOTCMD $ARCHOPTION /bin/bash addNonRootUser.sh
 rm $ROOTFS_DIR/addNonRootUser.sh
 
 # create the chroot/proot environment, where the magic (hopefully happens)
 
-$CHROOTCMD echo "PROOT CALLING ECHO IS WORKING"
-echo "output of commands is: $CHROOTCMD $ARCHOPTION command1 command2"
-$CHROOTCMD $ARCHOPTION gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon &
-$CHROOTCMD $ARCHOPTION pacman-key --init
-$CHROOTCMD $ARCHOPTION pacman-key --populate $POPNAME
+mkdir $ROOTFS_DIR/etc/pacman.d/gnupg
+echo "line 1"
+$CHROOTCMD $ARCHOPTION gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon & 
+echo "line 2"
+$CHROOTCMD $ARCHOPTION gpg-agent --daemon
+ps -aux | grep "gpg-agent"
+sleep 5
+ps -aux | grep "gpg-agent"
+$CHROOTCMD $ARCHOPTION /bin/bash pacman-key --init
+echo "line 3"
+$CHROOTCMD $ARCHOPTION /bin/bash pacman-key --populate $POPNAME
+echo "line 4"
 $CHROOTCMD $ARCHOPTION pacman -Syy --noconfirm
+echo "line 5"
 $CHROOTCMD $ARCHOPTION pacman -Su --noconfirm
+echo "line 6"
 $CHROOTCMD $ARCHOPTION pacman -Sy coreutils pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
+echo "line 7"
 
 tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
