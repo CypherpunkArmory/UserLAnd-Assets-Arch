@@ -25,7 +25,7 @@ mkdir -p $ROOTFS_DIR
 
 chown $SUDO_USER ./* # this may be necessary
 
-export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt -b /dev/urandom:/dev/random --rootfs=$ROOTFS_DIR"
+export CHROOTCMD="proot -0 -b /run -b /sys -b /dev -b /proc -b /mnt -b /dev/urandom:/dev/random -R $ROOTFS_DIR"
 
 # Download and untar the different filesystems. Using qemu-static utilities because we have to within the proot environment
 
@@ -100,6 +100,9 @@ cp "/etc/resolv.conf" "$ROOTFS_DIR/etc/resolv.conf"
 cp scripts/addNonRootUser.sh $ROOTFS_DIR
 chown $SUDO_USER $ROOTFS_DIR/addNonRootUser.sh
 chmod 777 $ROOTFS_DIR/addNonRootUser.sh
+
+$CHROOTCMD $ARCHOPTION echo $PATH
+
 $CHROOTCMD $ARCHOPTION /bin/bash addNonRootUser.sh
 rm $ROOTFS_DIR/addNonRootUser.sh
 
