@@ -95,37 +95,30 @@ case "$1" in
 
 cp "/etc/resolv.conf" "$ROOTFS_DIR/etc/resolv.conf"
 
-# stuff in a new users
+# create the chroot/proot environment, where the magic (hopefully happens)
+
+mkdir $ROOTFS_DIR/etc/pacman.d/gnupg
+$CHROOTCMD $ARCHOPTION /usr/bin/gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon & 
+$CHROOTCMD $ARCHOPTION /usr/bin/gpg-agent --daemon
+
+sleep 5
+
+$CHROOTCMD $ARCHOPTION /bin/bash /usr/bin/pacman-key --init
+$CHROOTCMD $ARCHOPTION /bin/bash /usr/bin/pacman-key --populate $POPNAME
+
+# shove in a new user
 
 cp scripts/addNonRootUser.sh $ROOTFS_DIR
 chown $SUDO_USER $ROOTFS_DIR/addNonRootUser.sh
 chmod 777 $ROOTFS_DIR/addNonRootUser.sh
-
-$CHROOTCMD $ARCHOPTION echo $PATH
-
 $CHROOTCMD $ARCHOPTION /bin/bash addNonRootUser.sh
 rm $ROOTFS_DIR/addNonRootUser.sh
 
-# create the chroot/proot environment, where the magic (hopefully happens)
+# not sure if this script is needed or if we can just do an adduser/useradd command
 
-mkdir $ROOTFS_DIR/etc/pacman.d/gnupg
-echo "line 1"
-$CHROOTCMD $ARCHOPTION gpg-agent --homedir /etc/pacman.d/gnupg --use-standard-socket --daemon & 
-echo "line 2"
-$CHROOTCMD $ARCHOPTION gpg-agent --daemon
-ps -aux | grep "gpg-agent"
-sleep 5
-ps -aux | grep "gpg-agent"
-$CHROOTCMD $ARCHOPTION /bin/bash pacman-key --init
-echo "line 3"
-$CHROOTCMD $ARCHOPTION /bin/bash pacman-key --populate $POPNAME
-echo "line 4"
 $CHROOTCMD $ARCHOPTION pacman -Syy --noconfirm
-echo "line 5"
 $CHROOTCMD $ARCHOPTION pacman -Su --noconfirm
-echo "line 6"
 $CHROOTCMD $ARCHOPTION pacman -Sy coreutils pacman-contrib base base-devel sudo tigervnc xterm xorg-twm expect --noconfirm
-echo "line 7"
 
 tar --exclude='dev/*' -czvf $ARCH_DIR/rootfs.tar.gz -C $ROOTFS_DIR .
 
