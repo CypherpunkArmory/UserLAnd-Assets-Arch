@@ -29,14 +29,8 @@ mkdir -p $ROOTFS_DIR
 mkdir -p $ROOTFS_DIR/etc/ca-certificates/extracted/
 cp $ROOTFS_DIR/../../x86_64/rootfs/etc/ca-certificates/extracted/tls-ca-bundle.pem $ROOTFS_DIR/etc/ca-certificates/extracted/tls-ca-bundle.pem
 
-#export ARCH_BOOTSTRAP_REPO_OPT="-r http://mirror.archlinux32.org"
-#git clone https://github.com/tokland/arch-bootstrap.git $ARCH_DIR/arch-bootstrap
-git clone https://github.com/CypherpunkArmory/arch-bootstrap.git $ARCH_DIR/arch-bootstrap
-#git -C $ARCH_DIR/arch-bootstrap checkout -b x86 4af1b4de548eabe251a5ba1ee3cfdf1a3b6c0c63
-#sed -i 's|core/os/$ARCH|i686/core|g' $ARCH_DIR/arch-bootstrap/arch-bootstrap.sh
-#sed -i 's|aarch64|i686|g' $ARCH_DIR/arch-bootstrap/arch-bootstrap.sh
-#sed -i 's|archlinux-keyring|archlinux-keyring ca-certificates ca-certificates-mozilla ca-certificates-utils|g' $ARCH_DIR/arch-bootstrap/arch-bootstrap.sh
-$ARCH_DIR/arch-bootstrap/arch-bootstrap.sh $ARCH_BOOTSTRAP_QEMU_OPT -a $ARCH_BOOTSTRAP_ARCH_OPT $ARCH_BOOTSTRAP_REPO_OPT $ROOTFS_DIR
+git clone https://github.com/tokland/arch-bootstrap.git $ARCH_DIR/arch-bootstrap
+$ARCH_DIR/arch-bootstrap/arch-bootstrap.sh $ARCH_BOOTSTRAP_QEMU_OPT -a $ARCH_BOOTSTRAP_ARCH_OPT $ROOTFS_DIR
 
 LC_ALL=C LANGUAGE=C LANG=C chroot $ROOTFS_DIR pacman -S sudo dropbear tigervnc xterm xorg-twm expect --noconfirm
 
