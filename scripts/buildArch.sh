@@ -26,9 +26,6 @@ mkdir -p $ARCH_DIR
 rm -rf $ROOTFS_DIR
 mkdir -p $ROOTFS_DIR
 
-mkdir -p $ROOTFS_DIR/etc/ca-certificates/extracted/
-cp $ROOTFS_DIR/../../x86_64/rootfs/etc/ca-certificates/extracted/tls-ca-bundle.pem $ROOTFS_DIR/etc/ca-certificates/extracted/tls-ca-bundle.pem
-
 git clone https://github.com/tokland/arch-bootstrap.git $ARCH_DIR/arch-bootstrap
 $ARCH_DIR/arch-bootstrap/arch-bootstrap.sh $ARCH_BOOTSTRAP_QEMU_OPT -a $ARCH_BOOTSTRAP_ARCH_OPT $ROOTFS_DIR
 
