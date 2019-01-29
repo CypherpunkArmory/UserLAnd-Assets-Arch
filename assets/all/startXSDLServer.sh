@@ -21,4 +21,4 @@ do
   sleep 1
 done
 
-su $INITIAL_USERNAME -c xterm -geometry 80x24+0+0 -e /bin/bash --login &
+su $INITIAL_USERNAME -c "xterm -geometry 80x24+0+0 -e /bin/bash --login &"
