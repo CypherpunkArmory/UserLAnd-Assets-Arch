@@ -1,0 +1,17 @@
+version: '3.2'
+
+services:
+   imagebuild:
+     build: 
+       context: .
+       dockerfile: Dockerfile
+       args:
+         IMAGE_DISTRO: my_arch
+         IMAGE_VERSION: latest
+         UPDATE_CMD: pacman -Syy
+         INSTALL_CMD: pacman -S sudo dropbear tigervnc xterm xorg-twm expect --noconfirm
+         CLEANUP_CMD: pacman -Scc
+         RUN_CMD: /input/arch.sh
+     volumes:
+       - ./output:/output
+       - ./input:/input
