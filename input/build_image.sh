@@ -25,7 +25,7 @@ rm -rf $ROOTFS_DIR
 mkdir -p $ROOTFS_DIR
 
 apt-get update
-apt-get install -y git curl xz-utils
+apt-get install -y git curl xz-utils binfmt-support qemu qemu-user-static 
 
 mkdir -p $ROOTFS_DIR/proc
 mkdir -p $ROOTFS_DIR/sys
