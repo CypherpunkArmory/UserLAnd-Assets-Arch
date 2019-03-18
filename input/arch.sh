@@ -8,7 +8,7 @@ echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 tar -czvf /output/rootfs.tar.gz --exclude sys --exclude dev --exclude proc --exclude mnt --exclude etc/mtab --exclude output --exclude input --exclude .dockerenv /
 
 #build disableselinux to go with this release
-pacman -S base-devel --noconfirm
+pacman --force -S glibc base-devel --noconfirm
 gcc -shared -fpic /input/disableselinux.c -o /output/libdisableselinux.so
 
 #get busybox to go with the release

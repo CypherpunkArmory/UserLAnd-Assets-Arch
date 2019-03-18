@@ -9,7 +9,7 @@ services:
          IMAGE_DISTRO: my_arch
          IMAGE_VERSION: latest
          UPDATE_CMD: pacman -Syy
-         INSTALL_CMD: pacman -S sudo dropbear tigervnc xterm xorg-twm expect --noconfirm
+         INSTALL_CMD: pacman -S sudo dropbear tigervnc xterm xorg-twm expect gzip --noconfirm
          CLEANUP_CMD: pacman -Scc
          RUN_CMD: /input/arch.sh
      volumes:
