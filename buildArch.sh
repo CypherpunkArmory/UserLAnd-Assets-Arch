@@ -13,14 +13,14 @@ case "$1" in
         exit
         ;;
 esac
-docker-compose -f build_image.yml down
-docker-compose -f build_image.yml build
-docker-compose -f build_image.yml up --force-recreate
+sudo docker-compose -f build_image.yml -f $1_build.yml down
+sudo docker-compose -f build_image.yml -f $1_build.yml build
+sudo docker-compose -f build_image.yml -f $1_build.yml up --force-recreate
 cat output/rootfs.tar | docker import - $IMAGE_ARCH/my_arch:latest
 
-docker-compose -f main.yml -f $1.yml down
-docker-compose -f main.yml -f $1.yml build
-docker-compose -f main.yml -f $1.yml up --force-recreate
+sudo docker-compose -f main.yml -f $1.yml down
+sudo docker-compose -f main.yml -f $1.yml build
+sudo docker-compose -f main.yml -f $1.yml up --force-recreate
 mkdir -p release
 cp output/rootfs.tar.gz release/$1-rootfs.tar.gz
 mkdir -p release/assets

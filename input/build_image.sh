@@ -4,15 +4,15 @@ export ARCH_DIR=output
 export ROOTFS_DIR=output/rootfs
 
 case "$1" in
-    arm32v7) export ARCH_BOOTSTRAP_ARCH_OPT=armv7h
+    arm) export ARCH_BOOTSTRAP_ARCH_OPT=armv7h
         export ARCH_BOOTSTRAP_QEMU_OPT=-q
         ;;
-    arm64v8) export ARCH_BOOTSTRAP_ARCH_OPT=aarch64
+    arm64) export ARCH_BOOTSTRAP_ARCH_OPT=aarch64
         export ARCH_BOOTSTRAP_QEMU_OPT=-q
         ;;
-    i386) export ARCH_BOOTSTRAP_ARCH_OPT=i686
+    x86) export ARCH_BOOTSTRAP_ARCH_OPT=x86_64
         ;;
-    amd64) export ARCH_BOOTSTRAP_ARCH_OPT=x86_64
+    x86_64) export ARCH_BOOTSTRAP_ARCH_OPT=x86_64
         ;;
     *) echo "unsupported arch: $1"
         exit
