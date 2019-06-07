@@ -11,7 +11,7 @@ pacman -Syy
 pacman -S sudo dropbear tigervnc xterm xorg-twm expect gzip --noconfirm
 
 #clean up after ourselves
-pacman -Scc
+pacman -Scc --noconfirm
 
 #tar up what we have before we grow it
 tar -czvf /output/rootfs.tar.gz --exclude sys --exclude dev --exclude proc --exclude mnt --exclude etc/mtab --exclude output --exclude input --exclude .dockerenv /
