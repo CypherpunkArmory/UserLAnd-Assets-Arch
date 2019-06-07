@@ -5,4 +5,4 @@ services:
      build: 
        args:
          IMAGE_ARCH: i386
-         QEMU_FILE: input/qemu-i386-static
+         QEMU_FILE: qemu-i386-static

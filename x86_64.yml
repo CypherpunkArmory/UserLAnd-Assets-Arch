@@ -5,4 +5,4 @@ services:
      build: 
        args:
          IMAGE_ARCH: amd64
-         QEMU_FILE: input/qemu-x86_64-static
+         QEMU_FILE: qemu-x86_64-static

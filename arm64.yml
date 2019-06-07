@@ -5,4 +5,4 @@ services:
      build: 
        args:
          IMAGE_ARCH: arm64v8
-         QEMU_FILE: input/qemu-aarch64-static
+         QEMU_FILE: qemu-aarch64-static
