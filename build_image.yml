@@ -1,0 +1,12 @@
+version: '3.2'
+
+
+services:
+   basebuild:
+     privileged: true
+     build: 
+       context: .
+       dockerfile: Dockerfile.build_image
+     volumes:
+       - ./output:/output
+       - ./input:/input
