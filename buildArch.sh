@@ -3,11 +3,17 @@
 case "$1" in
     arm) export IMAGE_ARCH=arm32v7
         wget http://os.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz 
-        gunzip -cd ArchLinuxARM-armv7-latest.tar.gz | docker import $IMAGE_ARCH/archlinux:latest
+        ls
+        which gunzip
+        gunzip -c ArchLinuxARM-armv7-latest.tar.gz | docker import $IMAGE_ARCH/archlinux:latest
+        ls
         ;;
     arm64) export IMAGE_ARCH=arm64v8
         wget http://os.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz
-        gunzip -cd ArchLinuxARM-aarch64-latest.tar.gz | docker import $IMAGE_ARCH/archlinux:latest
+        ls
+        which gunzip
+        gunzip -c ArchLinuxARM-aarch64-latest.tar.gz | docker import $IMAGE_ARCH/archlinux:latest
+        ls
         ;;
     x86) export IMAGE_ARCH=amd64
         ;;
