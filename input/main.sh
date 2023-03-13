@@ -6,6 +6,7 @@ echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 
 #update our repos so we can install some packages
 pacman -Syy
+pacman-key --init
 
 #install some packages with need for UserLAnd
 pacman -S sudo dropbear tigervnc xterm xorg-twm expect gzip --noconfirm
