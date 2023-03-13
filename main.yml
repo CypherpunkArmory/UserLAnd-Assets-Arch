@@ -6,7 +6,7 @@ services:
        context: .
        dockerfile: Dockerfile
        args:
-         IMAGE_DISTRO: my_arch
+         IMAGE_DISTRO: archlinux
          IMAGE_VERSION: latest
      volumes:
        - ./output:/output

@@ -2,10 +2,14 @@
 
 case "$1" in
     arm) export IMAGE_ARCH=arm32v7
+        wget http://os.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz 
+        gunzip -cd ArchLinuxARM-armv7-latest.tar.gz | docker import $IMAGE_ARCH/archlinux:latest
         ;;
     arm64) export IMAGE_ARCH=arm64v8
+        wget http://os.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz
+        gunzip -cd ArchLinuxARM-aarch64-latest.tar.gz | docker import $IMAGE_ARCH/archlinux:latest
         ;;
-    x86) export IMAGE_ARCH=i386
+    x86) export IMAGE_ARCH=amd64
         ;;
     x86_64) export IMAGE_ARCH=amd64
         ;;
@@ -13,10 +17,6 @@ case "$1" in
         exit
         ;;
 esac
-sudo docker-compose -f build_image.yml -f $1_build.yml down
-sudo docker-compose -f build_image.yml -f $1_build.yml build
-sudo docker-compose -f build_image.yml -f $1_build.yml up --force-recreate
-cat output/rootfs.tar | docker import - $IMAGE_ARCH/my_arch:latest
 
 sudo docker-compose -f main.yml -f $1.yml down
 sudo docker-compose -f main.yml -f $1.yml build
