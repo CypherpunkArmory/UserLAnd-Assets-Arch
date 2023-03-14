@@ -13,9 +13,9 @@ case "$1" in
         ;;
     x86) export IMAGE_ARCH=i386
         wget http://mirror.math.princeton.edu/pub/archlinux32/archisos/archlinux32-2022.12.01-i486.iso
-        mkdir -p /mnt/disk
-        mount -o loop archlinux32-2022.12.01-i486.iso /mnt/disk
-        tar -cvf image.tar /mnt/disk/
+        mkdir image
+        mount -o loop archlinux32-2022.12.01-i486.iso image
+        tar -cvf image.tar image/
         docker import image.tar $IMAGE_ARCH/archlinux:latest
         ;;
     x86_64) export IMAGE_ARCH=amd64
