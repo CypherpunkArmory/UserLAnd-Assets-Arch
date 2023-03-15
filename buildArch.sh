@@ -15,7 +15,9 @@ case "$1" in
         wget http://mirror.math.princeton.edu/pub/archlinux32/archisos/archlinux32-2022.12.01-i486.iso
         mkdir image
         sudo mount -o loop archlinux32-2022.12.01-i486.iso image
-        sudo tar -cvf image.tar image/
+        cd image
+        sudo tar -cvf ../image.tar .
+        cd ..
         docker import image.tar $IMAGE_ARCH/archlinux:latest
         ;;
     x86_64) export IMAGE_ARCH=amd64
