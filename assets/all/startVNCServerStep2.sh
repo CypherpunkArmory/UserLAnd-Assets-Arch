@@ -30,19 +30,21 @@ if [[ -z "${DIMENSIONS}" ]]; then
 	DIMENSIONS="1024x768"
 fi
 
-if [ ! -f /home/$INITIAL_USERNAME/.vncrc ]; then
-	vncrc_line="\$geometry = \"${DIMENSIONS}\";"
-	echo $vncrc_line > /home/$INITIAL_USERNAME/.vncrc
+vncrc_line="\$geometry = \"${DIMENSIONS}\";"
+echo $vncrc_line > /home/$INITIAL_USERNAME/.vncrc
+
+if [[ -z "${VNC_DISPLAY}" ]]; then
+  VNC_DISPLAY="51"
 fi
 
-rm /tmp/.X51-lock
-rm /tmp/.X11-unix/X51
-vncserver -kill :51
-vncserver :51 -SecurityTypes=VncAuth
+rm /tmp/.X${VNC_DISPLAY}-lock
+rm /tmp/.X11-unix/X${VNC_DISPLAY}
+vncserver -kill :${VNC_DISPLAY}
+vncserver :${VNC_DISPLAY} -SecurityTypes=VncAuth
 
-while [ ! -f /home/$INITIAL_USERNAME/.vnc/localhost:51.pid ]
+while [ ! -f /home/$INITIAL_USERNAME/.vnc/localhost:${VNC_DISPLAY}.pid ]
 do
   sleep 1
 done
 cd ~
-DISPLAY=localhost:51 xterm -geometry 80x24+0+0 -e /bin/bash --login &
+DISPLAY=localhost:${VNC_DISPLAY} xterm -geometry 80x24+0+0 -e /bin/bash --login &
