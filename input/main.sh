@@ -4,6 +4,14 @@ echo "127.0.0.1 localhost" > /etc/hosts
 echo "nameserver 8.8.8.8" > /etc/resolv.conf
 echo "nameserver 8.8.4.4" >> /etc/resolv.conf
 
+mkdir /usr/share/xsessions
+echo "[Desktop Entry]" > /usr/share/xsessions/twm.desktop
+echo "Name=twm" >> /usr/share/xsessions/twm.desktop
+echo "Comment=xorg-twm" >> /usr/share/xsessions/twm.desktop
+echo "TryExec=twm" >> /usr/share/xsessions/twm.desktop
+echo "Exec=twm" >> /usr/share/xsessions/twm.desktop
+echo "Type=Application" >> /usr/share/xsessions/twm.desktop
+
 #update our repos so we can install some packages
 pacman-key --init
 pacman-key --populate

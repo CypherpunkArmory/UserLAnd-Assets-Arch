@@ -39,12 +39,14 @@ fi
 
 rm /tmp/.X${VNC_DISPLAY}-lock
 rm /tmp/.X11-unix/X${VNC_DISPLAY}
+rm /home/$INITIAL_USERNAME/.vnc/localhost:${VNC_DISPLAY}.pid
 vncserver -kill :${VNC_DISPLAY}
 vncserver :${VNC_DISPLAY} -SecurityTypes=VncAuth
 
-while [ ! -f /home/$INITIAL_USERNAME/.vnc/localhost:${VNC_DISPLAY}.pid ]
+while [ ! -f /tmp/.X${VNC_DISPLAY}-lock ]
 do
   sleep 1
 done
+cat /tmp/.X${VNC_DISPLAY}-lock | tr -d " " > /home/$INITIAL_USERNAME/.vnc/localhost:${VNC_DISPLAY}.pid
 cd ~
 DISPLAY=localhost:${VNC_DISPLAY} xterm -geometry 80x24+0+0 -e /bin/bash --login &
