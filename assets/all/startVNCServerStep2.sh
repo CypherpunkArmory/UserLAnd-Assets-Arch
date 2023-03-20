@@ -39,7 +39,7 @@ fi
 
 rm /tmp/.X${VNC_DISPLAY}-lock
 rm /tmp/.X11-unix/X${VNC_DISPLAY}
-vncserver :${VNC_DISPLAY}
+vncserver :${VNC_DISPLAY} &
 
 while [ ! -f /tmp/.X${VNC_DISPLAY}-lock ]
 do
