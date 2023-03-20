@@ -19,7 +19,7 @@ pacman-key --refresh-keys
 pacman -Syy
 
 #install some packages with need for UserLAnd
-pacman -S sudo dropbear tigervnc xterm xorg-twm expect gzip --noconfirm
+pacman -S sudo dropbear x11vnc xterm xorg-twm xorg-server-xvfb xorg-xsetroot expect gzip --noconfirm
 
 #clean up after ourselves
 yes | pacman -Scc

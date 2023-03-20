@@ -9,42 +9,27 @@ if [[ -z "${INITIAL_VNC_PASSWORD}" ]]; then
 fi
 
 if [ ! -f /home/$INITIAL_USERNAME/.vnc/passwd ]; then
-
-prog=/usr/bin/vncpasswd
-
-/usr/bin/expect <<EOF
-spawn "$prog"
-expect "Password:"
-send "$INITIAL_VNC_PASSWORD\r"
-expect "Verify:"
-send "$INITIAL_VNC_PASSWORD\r"
-expect "(y/n)?"
-send "n\r"
-expect eof
-exit
-EOF
-
+  mkdir /home/$INITIAL_USERNAME/.vnc 
+  x11vnc -storepasswd $INITIAL_VNC_PASSWORD /home/$INITIAL_USERNAME/.vnc/passwd
 fi
 
 if [[ -z "${DIMENSIONS}" ]]; then
-	DIMENSIONS="1024x768"
+  DIMENSIONS="1024x768"
 fi
-
-vncrc_line="\$geometry = \"${DIMENSIONS}\";"
-echo $vncrc_line > /home/$INITIAL_USERNAME/.vncrc
 
 if [[ -z "${VNC_DISPLAY}" ]]; then
   VNC_DISPLAY="51"
 fi
 
 rm /tmp/.X${VNC_DISPLAY}-lock
-rm /tmp/.X11-unix/X${VNC_DISPLAY}
-vncserver :${VNC_DISPLAY} &
-
-while [ ! -f /tmp/.X${VNC_DISPLAY}-lock ]
-do
-  sleep 1
-done
-cat /tmp/.X${VNC_DISPLAY}-lock | tr -d " " > /home/$INITIAL_USERNAME/.vnc/localhost:${VNC_DISPLAY}.pid
+Xvfb :${VNC_DISPLAY} -screen 0 ${DIMENSIONS}x16 &
+sleep 2
+export DISPLAY=:${VNC_DISPLAY}
 cd ~
-DISPLAY=localhost:${VNC_DISPLAY} xterm -geometry 80x24+0+0 -e /bin/bash --login &
+xrdb -load $HOME/.Xresources
+xsetroot -solid gray &
+xterm -geometry 80x24+0+0 -e /bin/bash --login &
+LANG=C twm &
+x11vnc -xkb -noxrecord -noxfixes -noxdamage -display :${VNC_DISPLAY} -N -usepw -shared -noshm &
+VNC_PID=$!
+echo $VNC_PID > /home/$INITIAL_USERNAME/.vnc/localhost:${VNC_DISPLAY}.pid
