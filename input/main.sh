@@ -13,8 +13,10 @@ echo "Exec=twm" >> /usr/share/xsessions/twm.desktop
 echo "Type=Application" >> /usr/share/xsessions/twm.desktop
 
 #update our repos so we can install some packages
+rm -rf /etc/pacman.d/gnupg
 pacman-key --init
 pacman-key --populate
+pacman-key --populate archlinuxarm
 pacman-key --refresh-keys
 pacman -Syy
 pacman -Syyu
