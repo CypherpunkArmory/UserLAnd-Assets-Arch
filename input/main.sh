@@ -18,7 +18,7 @@ pacman-key --init
 pacman-key --populate
 pacman-key --refresh-keys
 pacman -Syy
-pacman -Syyu
+pacman -Syu --noconfirm
 
 #install some packages with need for UserLAnd
 pacman -S sudo dropbear x11vnc xterm xorg-twm xorg-server-xvfb xorg-xsetroot expect gzip --noconfirm
