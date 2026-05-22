@@ -29,7 +29,7 @@ yes | pacman -Scc
 tar -czvf /output/rootfs.tar.gz --exclude sys --exclude dev --exclude proc --exclude mnt --exclude etc/mtab --exclude output --exclude input --exclude .dockerenv /
 
 #build disableselinux to go with this release
-pacman -S glibc base-devel linux-api-headers --noconfirm
+pacman -S --overwrite '*' glibc base-devel linux-api-headers --noconfirm
 gcc -shared -fpic /input/disableselinux.c -o /output/libdisableselinux.so
 
 #get busybox to go with the release
