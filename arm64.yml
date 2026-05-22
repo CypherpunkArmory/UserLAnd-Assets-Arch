@@ -4,7 +4,8 @@ services:
    imagebuild:
      build: 
        args:
-         IMAGE_DISTRO: agners/archlinuxarm
+         IMAGE_DISTRO: lfdevs/archlinuxarm
          IMAGE_PLATFORM: linux/arm64/v8
+         IMAGE_VERSION: base-devel
          IMAGE_ARCH: arm64v8
          QEMU_FILE: qemu-aarch64-static
