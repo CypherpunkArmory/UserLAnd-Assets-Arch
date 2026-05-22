@@ -1,24 +1,7 @@
 #!/bin/bash
 
 case "$1" in
-    arm) export IMAGE_ARCH=arm32v7
-        wget http://os.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz 
-        gunzip -d ArchLinuxARM-armv7-latest.tar.gz
-        docker import ArchLinuxARM-armv7-latest.tar $IMAGE_ARCH/archlinux:latest
-        ;;
     arm64) export IMAGE_ARCH=arm64v8
-        wget http://os.archlinuxarm.org/os/ArchLinuxARM-aarch64-latest.tar.gz
-        gunzip -d ArchLinuxARM-aarch64-latest.tar.gz
-        docker import ArchLinuxARM-aarch64-latest.tar $IMAGE_ARCH/archlinux:latest
-        ;;
-    x86) export IMAGE_ARCH=i386
-        wget http://mirror.math.princeton.edu/pub/archlinux32/archisos/archlinux32-2022.12.01-i486.iso
-        mkdir image
-        sudo mount -o loop archlinux32-2022.12.01-i486.iso image
-        cd image
-        sudo tar -cvf ../image.tar .
-        cd ..
-        docker import image.tar $IMAGE_ARCH/archlinux:latest
         ;;
     x86_64) export IMAGE_ARCH=amd64
         ;;

@@ -4,5 +4,6 @@ services:
    imagebuild:
      build: 
        args:
+         IMAGE_DISTRO: archlinux
          IMAGE_ARCH: amd64
          QEMU_FILE: qemu-x86_64-static
