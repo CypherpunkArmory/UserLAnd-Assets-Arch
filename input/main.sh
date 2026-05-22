@@ -17,6 +17,7 @@ rm -rf /etc/pacman.d/gnupg
 pacman-key --init
 pacman-key --populate
 pacman-key --populate archlinuxarm
+pacman -S --noconfirm archlinux-keyring
 pacman-key --refresh-keys
 pacman -Syy
 pacman -Syyu
